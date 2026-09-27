@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>For Api · A Birthday Letter</title>
+  <!-- Fonts: elegant serif + clean sans-serif -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+  <style>
+    /* ---------- RESET & GLOBAL ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #faf7f2;
+      color: #2c221c;
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      font-size: 1rem;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.8s ease, color 0.6s ease;
+    }
+
+    /* subtle paper texture */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="1" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.035"/></svg>');
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'DM Serif Display', serif;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    a, button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ---------- VARIABLES ---------- */
+    :root {
+      --ivory: #faf7f2;
+      --blush: #f4ded9;
+      --rose: #c98b8b;
+      --burgundy: #7d3c4b;
+      --wine: #5e2a37;
+      --gold: #b9926b;
+      --charcoal: #2c221c;
+      --soft-gray: #8b7f78;
+      --card-bg: #ffffffdb;
+      --shadow-sm: 0 8px 20px -8px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 18px 30px -12px rgba(70, 40, 30, 0.12);
+      --transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    /* ---------- INTRO SCREEN ---------- */
+    #intro-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--ivory);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      text-align: center;
+      padding: 2rem;
+      transition: opacity 1.2s ease, visibility 1.2s ease;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    #intro-screen.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .intro-line {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.8rem, 6vw, 2.8rem);
+      color: var(--charcoal);
+      max-width: 700px;
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.9s ease forwards;
+    }
+
+    .intro-line:nth-child(2) {
+      font-size: clamp(1.2rem, 4.5vw, 1.6rem);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: var(--soft-gray);
+      animation-delay: 0.7s;
+      margin-bottom: 0;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ---------- MAIN CONTAINER ---------- */
+    .main-wrapper {
+      opacity: 0;
+      transition: opacity 1s ease;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .main-wrapper.visible {
+      opacity: 1;
+    }
+
+    /* ---------- SHARED ---------- */
+    .section {
+      margin: 7rem 0;
+      scroll-margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .section {
+        margin: 4.5rem 0;
+      }
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 6vw, 3rem);
+      margin-bottom: 1rem;
+      color: var(--wine);
+      letter-spacing: -0.02em;
+    }
+
+    .section-sub {
+      font-size: 1.1rem;
+      color: var(--soft-gray);
+      max-width: 600px;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+
+    /* ---------- COUNTDOWN SECTION ---------- */
+    .countdown-section {
+      text-align: center;
+      padding: 3rem 0;
+      background: linear-gradient(145deg, #fdfaf7, #f6ede8);
+      border-radius: 80px 20px 80px 20px;
+      margin: 2rem 0;
+      box-shadow: var(--shadow-sm);
+      transition: background 0.8s ease;
+    }
+
+    .countdown-heading {
+      font-size: clamp(2rem, 7vw, 3.2rem);
+      color: var(--wine);
+      margin-bottom: 0.5rem;
+    }
+
+    .countdown-sub {
+      font-size: 1.1rem;
+      color: var(--soft-gray);
+      margin-bottom: 2rem;
+      font-weight: 300;
+      padding: 0 1rem;
+    }
+
+    .countdown-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem 2.5rem;
+      margin: 2.5rem 0 1.8rem;
+    }
+
+    .countdown-item {
+      min-width: 90px;
+      padding: 0.8rem 0.5rem;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(4px);
+      border-radius: 20px;
+      box-shadow: 0 8px 12px -8px rgba(125, 60, 75, 0.1);
+      transition: background 0.3s;
+    }
+
+    .countdown-number {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.4rem, 8vw, 3.6rem);
+      font-weight: 400;
+      color: var(--burgundy);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .countdown-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--soft-gray);
+      margin-top: 0.5rem;
+      font-weight: 400;
+    }
+
+    .save-the-date {
+      font-size: 1rem;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 400;
+      margin-top: 1rem;
+    }
+
+    .save-the-date i {
+      font-style: normal;
+      color: var(--burgundy);
+    }
+
+    /* birthday mode countdown hide */
+    .birthday-mode .countdown-section {
+      display: none;
+    }
+
+    /* ---------- MESSAGE SECTION ---------- */
+    .message-content {
+      max-width: 720px;
+      margin: 0 auto;
+      font-size: 1.2rem;
+      color: #3d332e;
+      font-weight: 300;
+    }
+
+    .message-content p {
+      margin-bottom: 1.6rem;
+    }
+
+    .message-content .highlight {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      color: var(--wine);
+      line-height: 1.4;
+      margin-bottom: 2rem;
+    }
+
+    /* ---------- QUALITIES SECTION ---------- */
+    .qualities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem 2.5rem;
+      margin-top: 2rem;
+    }
+
+    .quality-item {
+      border-bottom: 1px solid #e4d9d1;
+      padding: 0.8rem 0;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .quality-item:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 6px;
+      border-radius: 4px;
+    }
+
+    .quality-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      color: var(--wine);
+      transition: color 0.2s;
+    }
+
+    .quality-item:hover .quality-header {
+      color: var(--burgundy);
+    }
+
+    .quality-icon {
+      font-size: 1.2rem;
+      color: var(--gold);
+      transition: transform 0.3s;
+    }
+
+    .quality-item.open .quality-icon {
+      transform: rotate(45deg);
+    }
+
+    .quality-description {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s ease, opacity 0.3s, margin 0.3s;
+      opacity: 0;
+      color: #5b4d45;
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.7;
+      padding-right: 1.5rem;
+    }
+
+    .quality-item.open .quality-description {
+      max-height: 200px;
+      opacity: 1;
+      margin-top: 1rem;
+    }
+
+    /* ---------- GALLERY / MEMORIES ---------- */
+    .gallery-editorial {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+      align-items: start;
+    }
+
+    .gallery-item {
+      grid-column: span 4;
+      background: #ffffffb3;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      cursor: pointer;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #f0e7e0;
+    }
+
+    .gallery-item.large {
+      grid-column: span 8;
+      aspect-ratio: 16 / 10;
+    }
+
+    .gallery-item.tall {
+      grid-column: span 4;
+      aspect-ratio: 3 / 4;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.02);
+    }
+
+    /* placeholder styling */
+    .gallery-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: #f7f0ea;
+      color: #b4a79e;
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 2rem;
+      transition: background 0.3s;
+    }
+
+    .gallery-placeholder span {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      opacity: 0.5;
+    }
+
+    .gallery-item .caption {
+      padding: 1rem 1.2rem 1.4rem;
+      background: #fffdfb;
+      font-size: 0.9rem;
+      color: var(--soft-gray);
+      border-top: 1px solid #f0e7e0;
+    }
+
+    .gallery-item .caption strong {
+      color: var(--wine);
+      font-weight: 500;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      .gallery-editorial {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .gallery-item,
+      .gallery-item.large,
+      .gallery-item.tall {
+        grid-column: span 1;
+        aspect-ratio: 4 / 3;
+      }
+    }
+
+    /* ---------- LIGHTBOX ---------- */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(35, 22, 18, 0.94);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      z-index: 20000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s, visibility 0.4s;
+    }
+
+    .lightbox.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-content {
+      max-width: 900px;
+      width: 100%;
+      background: #fdf9f6;
+      border-radius: 32px;
+      overflow: hidden;
+      box-shadow: 0 40px 60px -20px black;
+      display: flex;
+      flex-direction: column;
+      max-height: 90vh;
+    }
+
+    .lightbox-img-wrapper {
+      background: #e8ddd5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 240px;
+    }
+
+    .lightbox-img-wrapper img {
+      width: 100%;
+      height: auto;
+      max-height: 60vh;
+      object-fit: contain;
+    }
+
+    .lightbox-caption {
+      padding: 1.5rem 2rem 2rem;
+      background: #fffdfb;
+    }
+
+    .lightbox-caption h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem;
+      color: var(--wine);
+      margin-bottom: 0.5rem;
+    }
+
+    .lightbox-caption .date {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .lightbox-caption p {
+      color: #4f423b;
+      font-weight: 300;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 2rem;
+      font-size: 2rem;
+      color: #f0e7e0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.2s;
+      line-height: 1;
+    }
+
+    .lightbox-close:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* ---------- SURPRISE BUTTON (OPEN THIS) ---------- */
+    .surprise-section {
+      text-align: center;
+      background: #fff9f5;
+      border-radius: 80px 20px 80px 20px;
+      padding: 3.5rem 2rem;
+      margin: 6rem 0;
+      border: 1px solid #efe3db;
+    }
+
+    .surprise-trigger {
+      font-size: 1.5rem;
+      font-family: 'DM Serif Display', serif;
+      color: var(--wine);
+      background: transparent;
+      padding: 0.8rem 2rem;
+      border: 1.5px solid var(--gold);
+      border-radius: 60px;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .surprise-trigger:hover {
+      background: var(--gold);
+      color: white;
+      border-color: var(--gold);
+    }
+
+    .surprise-message {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.8s cubic-bezier(0.2, 0, 0, 1), opacity 0.5s, margin 0.5s;
+      opacity: 0;
+      font-size: 1.4rem;
+      font-family: 'DM Serif Display', serif;
+      color: var(--burgundy);
+      line-height: 1.5;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .surprise-message.show {
+      max-height: 300px;
+      opacity: 1;
+      margin-top: 2.5rem;
+    }
+
+    /* ---------- WISHES (birthday mode) ---------- */
+    .wishes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      margin: 2.5rem 0;
+    }
+
+    .wish-card {
+      background: #fffbf9;
+      padding: 1.8rem 1.5rem;
+      border-radius: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #f1e6df;
+      transition: transform 0.2s;
+    }
+
+    .wish-card h4 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      color: var(--wine);
+      margin-bottom: 0.75rem;
+    }
+
+    .wish-card p {
+      color: #5d4d44;
+      font-weight: 300;
+    }
+
+    /* ---------- LETTER ---------- */
+    .letter-section {
+      background: #fefcf9;
+      border-radius: 40px 12px 40px 12px;
+      padding: 3.5rem 2.5rem;
+      box-shadow: inset 0 0 0 1px #f1e6df, var(--shadow-sm);
+      background-image: repeating-linear-gradient(transparent, transparent 31px, #f0e7e0 32px);
+      background-size: 100% 32px;
+      line-height: 32px;
+    }
+
+    .letter-section h2 {
+      margin-bottom: 1.5rem;
+    }
+
+    .letter-text {
+      font-size: 1.2rem;
+      line-height: 32px;
+      color: #3f332c;
+      font-weight: 300;
+      white-space: pre-line;
+    }
+
+    .letter-signature {
+      margin-top: 2rem;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      color: var(--burgundy);
+      text-align: right;
+    }
+
+    /* ---------- FINAL SURPRISE ---------- */
+    .final-surprise {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .final-trigger {
+      font-size: 1.4rem;
+      background: var(--wine);
+      color: #faf7f2;
+      padding: 1rem 2.8rem;
+      border-radius: 60px;
+      transition: var(--transition);
+      box-shadow: 0 12px 18px -10px rgba(125, 60, 75, 0.4);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      border: 1px solid transparent;
+    }
+
+    .final-trigger:hover {
+      background: var(--burgundy);
+      transform: translateY(-2px);
+    }
+
+    .final-message {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 1s ease, opacity 0.8s, margin 0.6s;
+      opacity: 0;
+      margin-top: 0;
+    }
+
+    .final-message.reveal {
+      max-height: 500px;
+      opacity: 1;
+      margin-top: 3rem;
+    }
+
+    .final-message h2 {
+      font-size: clamp(2rem, 7vw, 3rem);
+      color: var(--burgundy);
+      margin-bottom: 1.5rem;
+    }
+
+    .final-message p {
+      font-size: 1.6rem;
+      font-family: 'DM Serif Display', serif;
+      color: var(--gold);
+    }
+
+    /* ---------- MUSIC BUTTON ---------- */
+    .music-btn {
+      position: fixed;
+      bottom: 1.8rem;
+      right: 1.8rem;
+      background: #ffffffdb;
+      backdrop-filter: blur(8px);
+      border-radius: 40px;
+      padding: 0.8rem 1.3rem;
+      box-shadow: var(--shadow-md);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #f0e7e0;
+      color: var(--wine);
+      font-weight: 400;
+      z-index: 1000;
+      transition: var(--transition);
+    }
+
+    .music-btn:hover {
+      background: #fff;
+      box-shadow: 0 12px 20px -12px rgba(125, 60, 75, 0.3);
+    }
+
+    .music-btn.playing {
+      background: var(--wine);
+      color: #faf7f2;
+      border-color: var(--wine);
+    }
+
+    /* ---------- BIRTHDAY MODE ---------- */
+    .birthday-mode .countdown-section {
+      display: none;
+    }
+
+    .birthday-mode .section-sub,
+    .birthday-mode .countdown-sub {
+      color: var(--gold);
+    }
+
+    .birthday-hero {
+      display: none;
+      text-align: center;
+      padding: 2rem 0 1rem;
+    }
+
+    .birthday-mode .birthday-hero {
+      display: block;
+    }
+
+    .birthday-hero h1 {
+      font-size: clamp(2.8rem, 12vw, 5.5rem);
+      color: var(--wine);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .birthday-hero p {
+      font-size: 1.3rem;
+      color: var(--soft-gray);
+      max-width: 600px;
+      margin: 0 auto;
+      font-weight: 300;
+    }
+
+    /* floating petals effect (birthday mode) */
+    .petal {
+      position: fixed;
+      top: -10vh;
+      font-size: 1.2rem;
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: 5;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ---------- REDUCED MOTION ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .petal {
+        display: none;
+      }
+    }
+
+    /* ---------- UTILS ---------- */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 4px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- INTRO SCREEN -->
+  <div id="intro-screen" class="active" aria-hidden="false">
+    <div class="intro-line">For someone very special...</div>
+    <div class="intro-line">A little surprise is waiting for you.</div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-wrapper" id="main-wrapper">
+    <!-- BIRTHDAY HERO (only visible in birthday mode) -->
+    <div class="birthday-hero">
+      <h1>Happy Birthday, Api ❤️</h1>
+      <p>Today isn't just another day. It's the day someone very special was born.</p>
+    </div>
+
+    <!-- COUNTDOWN SECTION (before birthday) -->
+    <section class="section countdown-section" id="countdown-section">
+      <h2 class="countdown-heading">Her Day Is Getting Closer...</h2>
+      <p class="countdown-sub">Until the day we celebrate someone who means so much.</p>
+      <div class="countdown-grid" id="countdown-grid">
+        <div class="countdown-item"><div class="countdown-number" id="days">00</div><div class="countdown-label">Days</div></div>
+        <div class="countdown-item"><div class="countdown-number" id="hours">00</div><div class="countdown-label">Hours</div></div>
+        <div class="countdown-item"><div class="countdown-number" id="minutes">00</div><div class="countdown-label">Minutes</div></div>
+        <div class="countdown-item"><div class="countdown-number" id="seconds">00</div><div class="countdown-label">Seconds</div></div>
+      </div>
+      <div class="save-the-date">17 October • Save the date <i>❤️</i></div>
+    </section>
+
+    <!-- PERSONAL MESSAGE -->
+    <section class="section" id="message-section">
+      <h2 class="section-title">A Few Words For You</h2>
+      <div class="message-content" id="message-content">
+        <p class="highlight">"Some people make life brighter simply by being part of it. You are one of those people."</p>
+        <p id="main-message-text"></p>
+      </div>
+    </section>
+
+    <!-- THINGS I LOVE ABOUT YOU (qualities) -->
+    <section class="section" id="qualities-section">
+      <h2 class="section-title">Things I Love About You</h2>
+      <div class="qualities-grid" id="qualities-grid"></div>
+    </section>
+
+    <!-- LITTLE MOMENTS, BIG MEMORIES (gallery) -->
+    <section class="section" id="gallery-section">
+      <h2 class="section-title">Little Moments, Big Memories</h2>
+      <p class="section-sub">A few pieces of time we've shared — with room for many more.</p>
+      <div class="gallery-editorial" id="gallery-grid"></div>
+    </section>
+
+    <!-- INTERACTIVE "OPEN THIS" SURPRISE -->
+    <section class="section surprise-section" id="surprise-section">
+      <button class="surprise-trigger" id="surprise-trigger" aria-expanded="false">
+        <span>There's one more thing...</span>
+        <span style="font-size:1.4rem;">✨</span>
+      </button>
+      <div class="surprise-message" id="surprise-message">
+        "No matter how busy life gets, I hope you always remember how loved and appreciated you are."
+      </div>
+    </section>
+
+    <!-- BIRTHDAY WISHES (birthday mode) -->
+    <section class="section" id="wishes-section" style="display: none;">
+      <h2 class="section-title">My Wishes For You</h2>
+      <div class="wishes-grid" id="wishes-grid"></div>
+    </section>
+
+    <!-- PERSONALIZED LETTER -->
+    <section class="section letter-section" id="letter-section">
+      <h2 class="section-title">A Letter For You</h2>
+      <div class="letter-text" id="letter-text"></div>
+      <div class="letter-signature">With love, always.</div>
+    </section>
+
+    <!-- FINAL SURPRISE -->
+    <section class="section final-surprise" id="final-surprise">
+      <button class="final-trigger" id="final-trigger" aria-expanded="false">One Last Little Surprise ❤️</button>
+      <div class="final-message" id="final-message">
+        <h2>You deserve all the happiness in the world.</h2>
+        <p>Happy Birthday, Api.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close lightbox">✕</button>
+    <div class="lightbox-content" id="lightbox-content">
+      <div class="lightbox-img-wrapper" id="lightbox-img-wrapper"></div>
+      <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <!-- MUSIC BUTTON -->
+  <button class="music-btn" id="music-btn" aria-label="Toggle background music">
+    <span>♫</span> <span id="music-label">Play Something Special</span>
+  </button>
+  <audio id="bg-music" loop preload="none">
+    <source src="assets/birthday-song.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    // ============================================================
+    //  BIRTHDAY CONTENT — EDIT EVERYTHING HERE
+    // ============================================================
+    const birthdayContent = {
+      name: "Api",
+      birthday: "17 October",
+
+      intro: "For someone very special...",
+
+      mainMessage: `Some people make life brighter simply by being part of it. You are one of those people.
+
+You are my Api G, my safe place, my guiding light. You support me in every situation, no matter how big or small. When the whole world feels silent, you are the one who stays. When I'm lost, your guidance is like a path of light showing me the way. And when I talk endlessly about the most random, nonsense things you listen. You actually listen. That means more to me than I can ever put into words.`,
+
+      qualities: [
+        { 
+          title: "The Way You Love Me", 
+          description: "You love me without conditions, without limits, without ever making me feel like a burden. That kind of love is rare, and I don't take it for granted." 
+        },
+        { 
+          title: "You Support Me In Everything", 
+          description: "Whether I'm chasing a dream or falling apart, you're standing right there beside me cheering, holding, believing. You never let me face anything alone." 
+        },
+        { 
+          title: "You're Always There", 
+          description: "When nobody else is there, you are. When everyone walks away, you stay. You've never once made me feel abandoned, and that is a gift I can never repay." 
+        },
+        { 
+          title: "Your Guidance", 
+          description: "Your words are like a path of light in my darkest moments. You don't just tell me what to do you walk beside me while I figure it out." 
+        },
+        { 
+          title: "You Listen To All My Nonsense", 
+          description: "The random stories. The pointless rants. The 2 a.m. overthinking. You listen to it all like it matters. And somehow, you make me feel like it does." 
+        },
+        { 
+          title: "Your Patience With Me", 
+          description: "I know I'm not always easy. But you never give up on me. You wait, you understand, you stay. That patience is a quiet kind of love." 
+        },
+        { 
+          title: "You Make Me Feel Safe", 
+          description: "With you, I don't have to pretend. I can be messy, confused, and unsure and you still look at me like I'm worth loving." 
+        }
+      ],
+
+      wishes: [
+        { 
+          title: "For your happiness", 
+          text: "May your life always have reasons to smile. May you feel even a fraction of the joy you've given me." 
+        },
+        { 
+          title: "For your dreams", 
+          text: "May the things you quietly wish for find their way to you. You deserve every beautiful thing this world has to offer." 
+        },
+        { 
+          title: "For your future", 
+          text: "May every new chapter bring something wonderful. And may you always know that I'll be here, cheering you on, just like you've always done for me." 
+        },
+        { 
+          title: "For your heart", 
+          text: "May you always be surrounded by people who appreciate the beautiful person you are. And may you never forget — you are so deeply loved." 
+        }
+      ],
+
+      letter: `Dear Api G,
+
+I don't know how to thank you for everything you are to me.
+
+You love me like it's the most natural thing in the world. You support me in every situation the good ones, the bad ones, the ones I don't even know how to explain. When nobody else is there, you are. You always have been. You always will be.
+
+Your guidance is like a path of light. When I'm confused, you don't just give me answers you help me find my own. When I'm scared, you don't just tell me not to be you hold my hand until the fear passes. When I talk about nonsense things, you listen like it's the most important conversation in the world. And honestly? That's one of the reasons I love you the most.
+
+You are my one and only official API G, but you're also my best friend, my safe place, my constant. I don't know what I did to deserve someone like you, but I'm grateful every single day.
+`,
+
+      finalMessage: "You deserve all the happiness in the world."
+    };
+
+    // ============================================================
+    //  BIRTHDAY DATE LOGIC
+    // ============================================================
+    const BIRTHDAY_MONTH = 8; // October = 9 (0-indexed)
+    const BIRTHDAY_DAY = 27;
+
+    function getNextBirthday() {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      let birthday = new Date(currentYear, BIRTHDAY_MONTH, BIRTHDAY_DAY);
+      if (now > birthday) {
+        birthday = new Date(currentYear + 1, BIRTHDAY_MONTH, BIRTHDAY_DAY);
+      }
+      return birthday;
+    }
+
+    function isBirthdayToday() {
+      const now = new Date();
+      return now.getMonth() === BIRTHDAY_MONTH && now.getDate() === BIRTHDAY_DAY;
+    }
+
+    // ============================================================
+    //  DOM ELEMENTS
+    // ============================================================
+    const introScreen = document.getElementById('intro-screen');
+    const mainWrapper = document.getElementById('main-wrapper');
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+    const countdownSection = document.getElementById('countdown-section');
+    const mainMessageText = document.getElementById('main-message-text');
+    const qualitiesGrid = document.getElementById('qualities-grid');
+    const galleryGrid = document.getElementById('gallery-grid');
+    const surpriseTrigger = document.getElementById('surprise-trigger');
+    const surpriseMessage = document.getElementById('surprise-message');
+    const wishesSection = document.getElementById('wishes-section');
+    const wishesGrid = document.getElementById('wishes-grid');
+    const letterText = document.getElementById('letter-text');
+    const finalTrigger = document.getElementById('final-trigger');
+    const finalMessage = document.getElementById('final-message');
+    const musicBtn = document.getElementById('music-btn');
+    const musicLabel = document.getElementById('music-label');
+    const bgMusic = document.getElementById('bg-music');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxClose = document.getElementById('lightbox-close');
+    const lightboxImgWrapper = document.getElementById('lightbox-img-wrapper');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+
+    // ============================================================
+    //  RENDER CONTENT FROM CONFIG
+    // ============================================================
+    function renderContent() {
+      // Main message
+      if (mainMessageText) {
+        mainMessageText.textContent = birthdayContent.mainMessage;
+      }
+
+      // Qualities
+      qualitiesGrid.innerHTML = '';
+      birthdayContent.qualities.forEach((q, i) => {
+        const item = document.createElement('div');
+        item.className = 'quality-item';
+        item.setAttribute('tabindex', '0');
+        item.setAttribute('role', 'button');
+        item.setAttribute('aria-expanded', 'false');
+        item.innerHTML = `
+          <div class="quality-header">
+            <span>${q.title}</span>
+            <span class="quality-icon">+</span>
+          </div>
+          <div class="quality-description">${q.description}</div>
+        `;
+        item.addEventListener('click', () => toggleQuality(item));
+        item.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleQuality(item);
+          }
+        });
+        qualitiesGrid.appendChild(item);
+      });
+
+      // Gallery (placeholder items)
+      renderGallery();
+
+      // Wishes (birthday mode only)
+      wishesGrid.innerHTML = '';
+      birthdayContent.wishes.forEach(w => {
+        const card = document.createElement('div');
+        card.className = 'wish-card';
+        card.innerHTML = `<h4>${w.title}</h4><p>${w.text}</p>`;
+        wishesGrid.appendChild(card);
+      });
+
+      // Letter
+      letterText.textContent = birthdayContent.letter;
+
+      // Surprise message
+      surpriseMessage.textContent = `"${birthdayContent.finalMessage.split('\n')[0]}"`;
+    }
+
+    function toggleQuality(el) {
+      const isOpen = el.classList.contains('open');
+      // close others? optional, but keep simple
+      el.classList.toggle('open');
+      el.setAttribute('aria-expanded', !isOpen);
+    }
+
+    // ============================================================
+    //  GALLERY RENDERING (with placeholders)
+    // ============================================================
+    const galleryItems = [
+      { src: 'assets/images/photo1.jpg', caption: 'A quiet afternoon', date: 'Summer 2023', memory: 'We sat by the window and talked for hours. Nothing special happened, and that made it perfect.' },
+      { src: 'assets/images/photo2.jpg', caption: 'That laugh', date: 'Winter 2022', memory: 'You laughed so hard you cried. I still think about it and smile.' },
+      { src: 'assets/images/photo3.jpg', caption: 'Our little tradition', date: 'Every year', memory: 'Some things never change, and I hope this never does.' }
+    ];
+
+    function renderGallery() {
+      galleryGrid.innerHTML = '';
+      // Use placeholders if images don't exist (for demo)
+      galleryItems.forEach((item, index) => {
+        const galleryItem = document.createElement('div');
+        galleryItem.className = 'gallery-item' + (index === 0 ? ' large' : (index === 1 ? ' tall' : ''));
+        galleryItem.setAttribute('tabindex', '0');
+        galleryItem.setAttribute('role', 'button');
+        galleryItem.setAttribute('aria-label', `View memory: ${item.caption}`);
+
+        // Placeholder visual (since actual images might not exist)
+        const placeholder = document.createElement('div');
+        placeholder.className = 'gallery-placeholder';
+        placeholder.innerHTML = `<span>📷</span>Add photo: ${item.caption}`;
+        galleryItem.appendChild(placeholder);
+
+        const captionDiv = document.createElement('div');
+        captionDiv.className = 'caption';
+        captionDiv.innerHTML = `<strong>${item.caption}</strong><br><span style="font-size:0.8rem;">${item.date}</span>`;
+        galleryItem.appendChild(captionDiv);
+
+        galleryItem.addEventListener('click', () => openLightbox(item));
+        galleryItem.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openLightbox(item);
+          }
+        });
+        galleryGrid.appendChild(galleryItem);
+      });
+    }
+
+    // Lightbox
+    function openLightbox(item) {
+      lightboxImgWrapper.innerHTML = `<div style="padding:4rem 2rem; text-align:center; color:#b4a79e;">📷<br><small style="font-size:0.8rem;">Image placeholder — add ${item.src}</small></div>`;
+      lightboxCaption.innerHTML = `
+        <h3>${item.caption}</h3>
+        <div class="date">${item.date}</div>
+        <p>${item.memory}</p>
+      `;
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    lightboxClose.addEventListener('click', () => {
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    });
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // ============================================================
+    //  COUNTDOWN & MODE SWITCH
+    // ============================================================
+    let countdownInterval = null;
+    let birthdayCheckInterval = null;
+
+    function updateCountdown() {
+      const now = new Date();
+      const birthday = getNextBirthday();
+      const diff = birthday - now;
+
+      if (diff <= 0 || isBirthdayToday()) {
+        // Birthday mode
+        if (!document.body.classList.contains('birthday-mode')) {
+          activateBirthdayMode();
+        }
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      daysEl.textContent = String(days).padStart(2, '0');
+      hoursEl.textContent = String(hours).padStart(2, '0');
+      minutesEl.textContent = String(minutes).padStart(2, '0');
+      secondsEl.textContent = String(seconds).padStart(2, '0');
+    }
+
+    function activateBirthdayMode() {
+      document.body.classList.add('birthday-mode');
+      countdownSection.style.display = 'none';
+      wishesSection.style.display = 'block';
+
+      // Add floating petals
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        for (let i = 0; i < 12; i++) {
+          createPetal(i);
+        }
+      }
+    }
+
+    function createPetal(index) {
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      petal.textContent = ['🌸', '✨', '🌹', '🍃', '💫'][index % 5];
+      petal.style.left = Math.random() * 100 + 'vw';
+      petal.style.animationDuration = (8 + Math.random() * 8) + 's';
+      petal.style.animationDelay = Math.random() * 5 + 's';
+      petal.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+      document.body.appendChild(petal);
+    }
+
+    // Start countdown
+    function startCountdown() {
+      if (countdownInterval) clearInterval(countdownInterval);
+      updateCountdown();
+      countdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+    // Check every minute if the date changed (to switch to birthday mode)
+    function startBirthdayWatcher() {
+      birthdayCheckInterval = setInterval(() => {
+        if (isBirthdayToday() && !document.body.classList.contains('birthday-mode')) {
+          activateBirthdayMode();
+        }
+      }, 30000); // every 30 seconds
+    }
+
+    // ============================================================
+    //  INTERACTIONS
+    // ============================================================
+    // Surprise reveal
+    surpriseTrigger.addEventListener('click', () => {
+      const isOpen = surpriseMessage.classList.contains('show');
+      surpriseMessage.classList.toggle('show');
+      surpriseTrigger.setAttribute('aria-expanded', !isOpen);
+      surpriseTrigger.querySelector('span:first-child').textContent = isOpen ? "There's one more thing..." : "Close";
+    });
+
+    // Final surprise
+    finalTrigger.addEventListener('click', () => {
+      finalMessage.classList.toggle('reveal');
+      const isOpen = finalMessage.classList.contains('reveal');
+      finalTrigger.setAttribute('aria-expanded', isOpen);
+      finalTrigger.textContent = isOpen ? 'Close' : 'One Last Little Surprise ❤️';
+    });
+
+    // Music toggle
+    let musicPlaying = false;
+    musicBtn.addEventListener('click', () => {
+      if (musicPlaying) {
+        bgMusic.pause();
+        musicBtn.classList.remove('playing');
+        musicLabel.textContent = 'Play Something Special';
+        musicPlaying = false;
+      } else {
+        bgMusic.play().catch(() => {
+          // If file missing, still allow toggle (just no sound)
+        });
+        musicBtn.classList.add('playing');
+        musicLabel.textContent = 'Pause Music';
+        musicPlaying = true;
+      }
+    });
+
+    // ============================================================
+    //  INTRO SEQUENCE
+    // ============================================================
+    function runIntro() {
+      // Intro already active, after 3.5s fade out and show main
+      setTimeout(() => {
+        introScreen.classList.remove('active');
+        introScreen.setAttribute('aria-hidden', 'true');
+        mainWrapper.classList.add('visible');
+        // Start countdown & check mode after intro
+        startCountdown();
+        startBirthdayWatcher();
+
+        // If birthday today, activate immediately
+        if (isBirthdayToday()) {
+          activateBirthdayMode();
+        }
+      }, 3600);
+    }
+
+    // ============================================================
+    //  INIT
+    // ============================================================
+    function init() {
+      renderContent();
+      runIntro();
+
+      // If the date rolls over while page is open, countdown will detect
+      // and trigger birthday mode (already handled in updateCountdown)
+    }
+
+    init();
+  </script>
+</body>
+</html>
